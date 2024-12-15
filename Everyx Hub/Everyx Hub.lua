@@ -108,7 +108,6 @@ local function renameScreenGuiss(newName)
     for _, gui in ipairs(EveryxHubUi:GetChildren()) do
         if gui:IsA("Frame") and gui:FindFirstChild("CanvasGroup") then
             gui.Name = newName
-			print("Main frame")
         end
     end
 end
