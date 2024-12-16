@@ -39,6 +39,35 @@ local function getAccessories()
 end
 
 
+local function getNPCs()
+    local npcsFolder = Workspace.Mob
+    local npcsTable = {}
+    for _, npc in ipairs(npcsFolder:GetDescendants()) do
+        if npc:IsA("Model") then
+            if not table.find(npcsTable,npc.Name) then
+                table.insert(npcsTable,npc.Name)
+            end    
+        end 
+    end
+    return npcsTable      
+end
+
+--auto farm tab
+
+local selectedNPC
+
+local npcDropdown = Tabs.AF:AddDropdown("Dropdown", {
+    Title = "NPC",
+    Values = getNPCs(),
+    Default = 1,
+})
+
+npcDropdown:SetValue("Bacon")
+
+npcDropdown:OnChanged(function(Value)
+   selectedNPC = Value
+end)
+
 --misc tab
 local selectedAccessory
 
