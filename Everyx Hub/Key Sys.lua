@@ -47,12 +47,10 @@ local function autoCheckKey()
         local premresponse = KeyGuardLibrary.validateDefaultKey(readfile("EveryxHubKey.txt"))
         if response == trueData then
             print("Key is valid")
-            _G.key_status = "Default"
-            writefile("EveryxHubKey.txt", key)
+            key_status = "Default"
         elseif premresponse == trueData then
             print("prem key")
-            _G.key_status = "Premium"
-            writefile("EveryxHubKey.txt", key)
+            key_status = "Premium"
         else
            print("Key is invalid")
         end
@@ -69,11 +67,11 @@ local Checkkey = Tabs.KeySys:AddButton({
         local premresponse = KeyGuardLibrary.validateDefaultKey(readfile("EveryxHubKey.txt")) or KeyGuardLibrary.validatePremiumKey(key)
         if response == trueData then
             print("Key is valid")
-            _G.key_status = "Default"
+            key_status = "Default"
             writefile("EveryxHubKey.txt", key)
         elseif premresponse == trueData then
             print("prem key")
-            _G.key_status = "Premium"
+            key_status = "Premium"
             writefile("EveryxHubKey.txt", key)
         else
            print("Key is invalid")
