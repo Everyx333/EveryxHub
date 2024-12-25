@@ -231,12 +231,6 @@ SaveManager:BuildConfigSection(Tabs.Settings)
 
 EveryxHub:SelectTab(1)
 
-Fluent:Notify({
-    Title = "Fluent",
-    Content = "You logged in as " .. lp.Name .. "You use " .. _G.key_status .. "key.",
-    Duration = 8
-})
-
 local CoreGui = game:GetService("CoreGui")
 
 local function renameScreenGuis(newName)
