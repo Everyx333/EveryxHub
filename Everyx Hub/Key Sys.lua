@@ -48,6 +48,7 @@ local function autoCheckKey()
         if response == trueData then
             print("Key is valid")
             key_status = "Default"
+            loadstring(game:HttpGet("https://cdn.keyguardian.org/library/v1.0.0.lua"))()
         elseif premresponse == trueData then
             print("prem key")
             key_status = "Premium"
