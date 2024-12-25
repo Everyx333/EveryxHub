@@ -11,7 +11,9 @@ KeyGuardLibrary.Set({
 
 local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
 local key = ""
-_G.key_status
+_G.key_status = ""
+
+local valid = isfile("EveryxHubKey.txt")
 
 local Window = Fluent:CreateWindow({
     Title = "Key System",
@@ -39,19 +41,40 @@ local Entkey = Tabs.KeySys:AddInput("Input", {
     end
 })
 
-local Checkkey = Tabs.KeySys:AddButton({
-    Title = "Check Key",
-    Description = "Enter Key before pressing this button",
-    Callback = function()
-        local response = KeyGuardLibrary.validateDefaultKey(key)
-        local premresponse = KeyGuardLibrary.validatePremiumKey(key)
+local function autoCheckKey()
+    if valid == true then
+        local response = KeyGuardLibrary.validateDefaultKey(readfile("EveryxHubKey.txt"))
+        local premresponse = KeyGuardLibrary.validateDefaultKey(readfile("EveryxHubKey.txt"))
         if response == trueData then
-           print("Key is valid")
-           _G.key_status = "Default"
-           -- Your code here
+            print("Key is valid")
+            _G.key_status = "Default"
+            writefile("EveryxHubKey.txt", key)
         elseif premresponse == trueData then
             print("prem key")
             _G.key_status = "Premium"
+            writefile("EveryxHubKey.txt", key)
+        else
+           print("Key is invalid")
+        end
+    end
+end
+
+autoCheckKey()
+
+local Checkkey = Tabs.KeySys:AddButton({
+    Title = "Check Key",
+    Description = "Enter Key before pressing this button or if your key file is valid then it will work",
+    Callback = function()
+        local response = KeyGuardLibrary.validateDefaultKey(readfile("EveryxHubKey.txt")) or KeyGuardLibrary.validateDefaultKey(key)
+        local premresponse = KeyGuardLibrary.validateDefaultKey(readfile("EveryxHubKey.txt")) or KeyGuardLibrary.validatePremiumKey(key)
+        if response == trueData then
+            print("Key is valid")
+            _G.key_status = "Default"
+            writefile("EveryxHubKey.txt", key)
+        elseif premresponse == trueData then
+            print("prem key")
+            _G.key_status = "Premium"
+            writefile("EveryxHubKey.txt", key)
         else
            print("Key is invalid")
         end
