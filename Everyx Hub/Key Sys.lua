@@ -48,10 +48,11 @@ local function autoCheckKey()
         if response == trueData then
             print("Key is valid")
             key_status = "Default"
-            loadstring(game:HttpGet("https://cdn.keyguardian.org/library/v1.0.0.lua"))()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/Everyx333/EveryxHub/refs/heads/main/Everyx%20Hub/Everyx%20Hub.lua"))()
         elseif premresponse == trueData then
             print("prem key")
             key_status = "Premium"
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/Everyx333/EveryxHub/refs/heads/main/Everyx%20Hub/Everyx%20Hub.lua"))()
         else
            print("Key is invalid")
         end
@@ -70,10 +71,12 @@ local Checkkey = Tabs.KeySys:AddButton({
             print("Key is valid")
             key_status = "Default"
             writefile("EveryxHubKey.txt", key)
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/Everyx333/EveryxHub/refs/heads/main/Everyx%20Hub/Everyx%20Hub.lua"))()
         elseif premresponse == trueData then
             print("prem key")
             key_status = "Premium"
             writefile("EveryxHubKey.txt", key)
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/Everyx333/EveryxHub/refs/heads/main/Everyx%20Hub/Everyx%20Hub.lua"))()
         else
            print("Key is invalid")
         end
