@@ -206,7 +206,7 @@ local FxToggle = Tabs.Misc:AddToggle("FxDestroy", {Title = "Press to destroy the
             SubContent = "",
             Duration = 10
         })
-        while OptionsFxDestroy.Value == true do
+        while Options.FxDestroy.Value == true do
             wait()
             getFX()
         end
