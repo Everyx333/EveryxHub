@@ -163,7 +163,7 @@ AFNPC:OnChanged(function()
     end
 end)
 
-Tabs.Main:AddParagraph({
+Tabs.AF:AddParagraph({
     Title = "Auto Farm Settings",
     Content = "Auto Farm Settings are below this message!"
 })
