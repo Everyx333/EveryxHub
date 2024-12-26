@@ -25,8 +25,10 @@ local Options = Fluent.Options
 local lp = game.Players.LocalPlayer
 local character = lp.Character or lp.CharacterAdded:Wait()
 local hrp = character:WaitForChild("HumanoidRootPart")
+local humanoid = character:WaitForChild("Humanoid")
 local RS = game.ReplicatedStorage
 local VirtualUser = game:GetService("VirtualUser")
+local selectedWeapon = ""
 
 
 local function rotateToGround()
@@ -34,11 +36,6 @@ local function rotateToGround()
     
     local downwardsCFrame = CFrame.new(position, position - Vector3.new(0, 1, 0))
     hrp.CFrame = downwardsCFrame
-end
-
-local function autoClick()
-    VirtualUser:ClickButton1(Vector2.new(0, 0))
-    wait()
 end
 
 
@@ -102,24 +99,22 @@ local function noclip()
     end
 end
  
-local function moveto(obj, speed)
-    local info = TweenInfo.new(((game.Players.LocalPlayer.Character.HumanoidRootPart.Position - obj.Position).Magnitude)/ speed,Enum.EasingStyle.Linear)
-    local tween = TweenService:Create(game.Players.LocalPlayer.Character.HumanoidRootPart, info, {CFrame = obj})
- 
-    if not game.Players.LocalPlayer.Character.HumanoidRootPart:FindFirstChild("BodyVelocity") then
-        antifall = Instance.new("BodyVelocity", game.Players.LocalPlayer.Character.HumanoidRootPart)
-        antifall.Velocity = Vector3.new(0,0,0)
-        noclipE = game:GetService("RunService").Stepped:Connect(noclip)
-        tween:Play()
+local function moveto(obj)
+    
+    hrp.CFrame = CFrame.new(obj.Position.X, obj.Position.Y + AFOffset, obj.Position.Z)
+    if hrp.Anchored == true then
+        hrp.Anchored = false
+        wait()
+        hrp.Anchored = true
+    else
+        hrp.Anchored = false
     end
- 
-    tween.Completed:Connect(function()
-        antifall:Destroy()
-        noclipE:Disconnect()
-    end)
 end
 
+
 local AFOffset = 15
+
+
 local afnpc = false
 
 local npcTable = {}
@@ -151,15 +146,25 @@ npcDropdown:OnChanged(function(Value)
    selectedNPC = Value
 end)
 
+
+
 local AFNPC = Tabs.AF:AddToggle("AFNPC", {Title = "Auto farm selected npc", Default = false })
 
 AFNPC:OnChanged(function()
     afnpc = Options.AFNPC.Value
-    print(afnpc)
     while afnpc == true do 
         task.wait()
-        moveto(getNPC().HumanoidRootPart.CFrame + Vector3.new(0,AFOffset,0), 1000)
+        local tool = lp.Backpack:FindFirstChild(selectedWeapon)
+	    if tool then
+            tool.Parent = character
+            humanoid:EquipTool(tool)
+        end
+        moveto(getNPC())
         game:GetService("VirtualUser"):ClickButton1(Vector2.new(9e9, 9e9))
+    end
+    while afnpc == false do
+        wait()
+        hrp.Anchored = false
     end
 end)
 
@@ -168,10 +173,46 @@ Tabs.AF:AddParagraph({
     Content = "Auto Farm Settings are below this message!"
 })
 
+local EntOffset = Tabs.AF:AddInput("Input", {
+    Title = "Enter Y Offset",
+    Description = "Enter Y offset to auto farm",
+    Default = "",
+    Placeholder = "Enter offset...",
+    Numeric = false,
+    Finished = false,
+    Callback = function(Value)
+        AFOffset = Value
+    end
+})
+
+local weaponsTable = {}
+
+local function getWeapons()
+    local bp = lp.Backpack
+
+    for _, weapon in ipairs(bp:GetDescendants()) do
+        if weapon:IsA("Tool") then
+            table.insert(weaponsTable, weapon.Name)
+        end
+    end
+
+    return weaponsTable
+end
+
+local weapons = Tabs.AF:AddDropdown("WDropdown", {
+    Title = "Weapon",
+    Values = getWeapons(),
+    Default = 1,
+})
+
+weapons:OnChanged(function(Value)
+    selectedWeapon = Value
+end)
+
 --misc tab
 local selectedAccessory
 
-local accessory = Tabs.Misc:AddDropdown("Dropdown", {
+local accessory = Tabs.Misc:AddDropdown("ADropdown", {
     Title = "Accessory",
     Values = getAccessories(),
     Default = 1,
@@ -200,12 +241,14 @@ Tabs.Misc:AddButton({
 local FxToggle = Tabs.Misc:AddToggle("FxDestroy", {Title = "Press to destroy the fx, unrevertable", Default = false })
 
     FxToggle:OnChanged(function()
-        Fluent:Notify({
-            Title = "Warning",
-            Content = "If you want to turn it off, disable the toggle and rejoin!",
-            SubContent = "",
-            Duration = 10
-        })
+        if Options.FxDestroy.Value == true then
+            Fluent:Notify({
+                Title = "Warning",
+                Content = "If you want to turn it off, disable the toggle and rejoin!",
+                SubContent = "",
+                Duration = 10
+            })
+        end
         while Options.FxDestroy.Value == true do
             wait()
             getFX()
@@ -230,6 +273,12 @@ SaveManager:BuildConfigSection(Tabs.Settings)
 
 
 EveryxHub:SelectTab(1)
+
+--[[Fluent:Notify({
+    Title = "Fluent",
+    Content = "You logged in as " .. lp.Name .. "You use " .. key_status .. ".",
+    Duration = 8
+})]]
 
 local CoreGui = game:GetService("CoreGui")
 
@@ -256,30 +305,57 @@ end
 local function setupOpenCloseUi()
     local openClose = Instance.new("ImageButton")
     local UiCorner = Instance.new("UICorner")
+    
     openClose.Parent = EveryxHubUi
     UiCorner.Parent = openClose
     openClose.Name = "OpenClose"
     openClose.Size = UDim2.new(0, 50, 0, 50)
     openClose.Position = UDim2.new(0.15171, 0, 0.35618, 0)
     openClose.Image = "rbxassetid://92834712270430"
-    local player = game.Players.LocalPlayer
-    local mouse = player:GetMouse()
 
-    local function onMouseClick()
-        if EveryxHubUi.MainFrame.Visible == true then
-            EveryxHubUi.MainFrame.Visible = false
-        elseif EveryxHubUi.MainFrame.Visible == false then
-            EveryxHubUi.MainFrame.Visible = true
-        end    
+    local function toggleMainFrameVisibility()
+        EveryxHubUi.MainFrame.Visible = not EveryxHubUi.MainFrame.Visible
     end
 
+    openClose.MouseButton1Click:Connect(toggleMainFrameVisibility)
 
-    openClose.MouseButton1Click:Connect(onMouseClick)
-    openClose.TouchTap:Connect(onMouseClick)
-end    
+    openClose.TouchTap:Connect(toggleMainFrameVisibility)
+end
+
+local function setupAutoFarmTurnOffOn()
+    local AFTOON = Instance.new("TextButton")
+    local UiCorner2 = Instance.new("UICorner")
+
+    AFTOON.Parent = EveryxHubUi
+    UiCorner2.Parent = AFTOON
+
+    AFTOON.Name = "AFTOON"
+    AFTOON.Size = UDim2.new(0, 50, 0, 50)
+    AFTOON.Position = UDim2.new(0.20000, 0, 0.35618, 0)
+    AFTOON.Text = "Turn off auto farm"
+    AFTOON.TextColor3 = Color3.fromRGB(255, 255, 255)
+    AFTOON.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+    
+    local function toggleAutoFarmOffOn()
+        if Options.AFNPC.Value == true then
+            Options.AFNPC:SetValue(false)
+        else
+            Options.AFNPC:SetValue(true)
+        end
+    end
+
+    AFTOON.MouseButton1Click:Connect(toggleAutoFarmOffOn)
+
+    AFTOON.TouchTap:Connect(toggleAutoFarmOffOn)
+end
+
+
+
+
 
 renameScreenGuiss("MainFrame")
 setupOpenCloseUi()
+setupAutoFarmTurnOffOn()
 
 SaveManager:LoadAutoloadConfig()
 
