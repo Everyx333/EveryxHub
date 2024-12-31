@@ -11,8 +11,7 @@ local debug = {
     "getNpcs" = "❌",
     "getWeapons" = "❌",
     "getAccessories" = "❌"
-    
-}
+    }
 
 local EveryxHub = Fluent:CreateWindow({
     Title = "Everyx Hub " .. "1.0.0" ,
