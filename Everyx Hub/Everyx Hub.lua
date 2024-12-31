@@ -2,6 +2,18 @@ local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/
 local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/SaveManager.lua"))()
 local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/InterfaceManager.lua"))()
 
+local debug = {
+    "renameSG" = "❌",
+    "renameF" = "❌",
+    "aftoon" = "❌",
+    "openClose" = "❌",
+    "getFx" = "❌",
+    "getNpcs" = "❌",
+    "getWeapons" = "❌",
+    "getAccesseries" = "❌",
+    
+}
+
 local EveryxHub = Fluent:CreateWindow({
     Title = "Everyx Hub " .. "1.0.0" ,
     SubTitle = "by Everyx",
