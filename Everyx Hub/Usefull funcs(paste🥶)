@@ -13,3 +13,10 @@ local function rotateToGround()
     local downwardsCFrame = CFrame.new(position, position - Vector3.new(0, 1, 0))
     hrp.CFrame = downwardsCFrame
 end
+
+local function m1(pos) --Vector2.new()
+            game:GetService("VirtualUser"):ClickButton1(pos)
+end
+local function m2(pos) --Vector2.new()
+            game:GetService("VirtualUser"):ClickButton2(pos)
+end
