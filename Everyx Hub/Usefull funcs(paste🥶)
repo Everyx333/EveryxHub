@@ -1,0 +1,10 @@
+-variables
+
+
+--funcs
+local function rotateToGround()
+    local position = hrp.Position
+
+    local downwardsCFrame = CFrame.new(position, position - Vector3.new(0, 1, 0))
+    hrp.CFrame = downwardsCFrame
+end
