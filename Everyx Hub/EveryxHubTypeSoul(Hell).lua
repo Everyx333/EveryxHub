@@ -114,29 +114,32 @@ function destroyAllBillboards()
 end
 
 -- Tweening functions
-local function moveto(obj, speed)
-    local info = TweenInfo.new((
-        game.Players.LocalPlayer.Character.HumanoidRootPart.Position - obj.Position
-    ).Magnitude / speed, Enum.EasingStyle.Linear)
-    local tween = TweenService:Create(
-        game.Players.LocalPlayer.Character.HumanoidRootPart, 
-        info, 
-        {CFrame = obj}
-    )
-
-    if not game.Players.LocalPlayer.Character.HumanoidRootPart:FindFirstChild("BodyVelocity") then
-        antifall = Instance.new("BodyVelocity", game.Players.LocalPlayer.Character.HumanoidRootPart)
-        antifall.Velocity = Vector3.new(0, 0, 0)
-        noclipE = game:GetService("RunService").Stepped:Connect(noclip)
-        tween:Play()
-        isCurrentlyTweening = true
-    end
-
-    tween.Completed:Connect(function()
-        antifall:Destroy()
-        noclipE:Disconnect()
-        isCurrentlyTweening = false
-    end)
+function tweenToLguy(lguy)
+    if not tweeningEnabled or not character or not humanoid then return end
+    
+    isCurrentlyTweening = true
+    setNoclip(true)
+    
+    -- Calculate position 80 studs above LavaGuy
+    local targetPosition = lguy:GetPivot().Position + Vector3.new(0, 80, 0)
+    
+    -- Create CFrame that faces downward toward the LavaGuy
+    local lookVector = (lguy:GetPivot().Position - targetPosition).Unit
+    local targetCFrame = CFrame.new(targetPosition, targetPosition + lookVector)
+    
+    local tweenInfo = TweenInfo.new(1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+    
+    humanoid:ChangeState(Enum.HumanoidStateType.Flying)
+    
+    local tween = TweenService:Create(rootPart, tweenInfo, {
+        CFrame = targetCFrame
+    })
+    
+    tween:Play()
+    tween.Completed:Wait()
+    
+    setNoclip(false)
+    isCurrentlyTweening = false
 end
 
 function findClosestLguy()
