@@ -1,5 +1,10 @@
 -variables
-
+local lp = game.Players.LocalPlayer
+local character = lp.Character or lp.CharacterAdded:Wait()
+local hrp = character:WaitForChild("HumanoidRootPart")
+local humanoid = character:WaitForChild("Humanoid")
+local RS = game.ReplicatedStorage
+local VirtualUser = game:GetService("VirtualUser")
 
 --funcs
 local function rotateToGround()
