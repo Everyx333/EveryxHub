@@ -6,6 +6,7 @@ local humanoid = character:WaitForChild("Humanoid")
 local RS = game.ReplicatedStorage
 local VirtualUser = game:GetService("VirtualUser")
 local VIM = game:GetService("VirtualInputManager")
+local GuiService = game:GetService("GuiService")
 
 --funcs
 local function rotateToGround()
