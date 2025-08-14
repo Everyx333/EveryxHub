@@ -5,6 +5,7 @@ local hrp = character:WaitForChild("HumanoidRootPart")
 local humanoid = character:WaitForChild("Humanoid")
 local RS = game.ReplicatedStorage
 local VirtualUser = game:GetService("VirtualUser")
+local VIM = game:GetService("VirtualInputManager")
 
 --funcs
 local function rotateToGround()
@@ -19,4 +20,13 @@ local function m1(pos) --Vector2.new()
 end
 local function m2(pos) --Vector2.new()
             game:GetService("VirtualUser"):ClickButton2(pos)
+end
+
+local function replicateButtonClick(button) --path
+        GuiService.SelectedObject = button
+    VIM:SendKeyEvent(true, Enum.KeyCode.Return, false, game)
+    wait(0.05)
+    VIM:SendKeyEvent(false, Enum.KeyCode.Return, false, game)
+    wait(0.05)
+    GuiService.GuiNavigationEnabled = false
 end
