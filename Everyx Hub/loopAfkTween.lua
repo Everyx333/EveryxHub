@@ -21,6 +21,11 @@ local function moveTo(obj, speed)
     end)
 end
 
+function checkForRaid()
+    if game:GetService("Players").LocalPlayer.PlayerGui.Settings.RaidConfirm.Visible == true then
+        local yes = game:GetService("Players").LocalPlayer.PlayerGui.Settings.RaidConfirm.Yes
+        
+
 while true do
     moveTo(workspace.Map:GetChildren()[9]:GetChildren()[6],250)
     task.wait(1)
