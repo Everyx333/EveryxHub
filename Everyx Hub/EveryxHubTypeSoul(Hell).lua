@@ -113,7 +113,28 @@ function destroyAllBillboards()
     activeBillboards = {}
 end
 
+local function moveTo(obj, speed)
+    local info = TweenInfo.new((
+        game.Players.LocalPlayer.Character.HumanoidRootPart.Position - obj.Position
+    ).Magnitude / speed, Enum.EasingStyle.Linear)
+    local tween = TweenService:Create(
+        game.Players.LocalPlayer.Character.HumanoidRootPart, 
+        info, 
+        {CFrame = obj}
+    )
 
+    if not game.Players.LocalPlayer.Character.HumanoidRootPart:FindFirstChild("BodyVelocity") then
+        antifall = Instance.new("BodyVelocity", game.Players.LocalPlayer.Character.HumanoidRootPart)
+        antifall.Velocity = Vector3.new(0, 0, 0)
+        noclipE = game:GetService("RunService").Stepped:Connect(noclip)
+        tween:Play()
+    end
+
+    tween.Completed:Connect(function()
+        antifall:Destroy()
+        noclipE:Disconnect()
+    end)
+end
 
 function startSpam()
     if spamConnection then spamConnection:Disconnect() end
@@ -140,7 +161,8 @@ billboardToggle.MouseButton1Click:Connect(function()
     end
 end)
 
--- Main scanning loop
+moveTo(Vector3.new(-749.6484985351562,1972.8282470703125,-479.56689453125),150)
+
 while true do
     task.wait(5)
     if billboardsEnabled then
