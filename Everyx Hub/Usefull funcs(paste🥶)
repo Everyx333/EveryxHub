@@ -60,3 +60,11 @@ local function moveto(obj, speed)
         noclipE:Disconnect()
     end)
 end
+
+local function copyPlrPos()
+    local lp = game.Players.LocalPlayer
+    local character = lp.Character or lp.CharacterAdded:Wait()
+    local hrp = character:WaitForChild("HumanoidRootPart")
+    setclipboard("Vector3.new(" .. hrp.Position.X  .. "," .. hrp.Position.Y .. "," .. hrp.Position.Z .. ")")
+end
+    
