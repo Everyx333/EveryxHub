@@ -113,52 +113,7 @@ function destroyAllBillboards()
     activeBillboards = {}
 end
 
--- Tweening functions
-function tweenToLguy(lguy)
-    if not tweeningEnabled or not character or not humanoid then return end
-    
-    isCurrentlyTweening = true
-    setNoclip(true)
-    
-    -- Calculate position 80 studs above LavaGuy
-    local targetPosition = lguy:GetPivot().Position + Vector3.new(0, 80, 0)
-    
-    -- Create CFrame that faces downward toward the LavaGuy
-    local lookVector = (lguy:GetPivot().Position - targetPosition).Unit
-    local targetCFrame = CFrame.new(targetPosition, targetPosition + lookVector)
-    
-    local tweenInfo = TweenInfo.new(1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
-    
-    humanoid:ChangeState(Enum.HumanoidStateType.Flying)
-    
-    local tween = TweenService:Create(rootPart, tweenInfo, {
-        CFrame = targetCFrame
-    })
-    
-    tween:Play()
-    tween.Completed:Wait()
-    
-    setNoclip(false)
-    isCurrentlyTweening = false
-end
 
-function findClosestLguy()
-    local closest = nil
-    local closestDistance = math.huge
-    local characterPosition = character:GetPivot().Position
-    
-    for _, lguy in ipairs(workspace.Entities:GetDescendants()) do
-        if lguy.Name == "LavaGuy" then
-            local distance = (lguy:GetPivot().Position - characterPosition).Magnitude
-            if distance < closestDistance and distance < 600 then
-                closestDistance = distance
-                closest = lguy
-            end
-        end
-    end
-    
-    return closest
-end
 
 function startSpam()
     if spamConnection then spamConnection:Disconnect() end
@@ -182,33 +137,6 @@ billboardToggle.MouseButton1Click:Connect(function()
     
     if not billboardsEnabled then
         destroyAllBillboards()
-    end
-end)
-
-tweenToggle.MouseButton1Click:Connect(function()
-    tweeningEnabled = not tweeningEnabled
-    tweenToggle.Text = "Toggle Tweening (" .. (tweeningEnabled and "ON)" or "OFF)")
-    
-    if tweeningEnabled then
-        startSpam()
-        
-        if tweeningConnection then tweeningConnection:Disconnect() end
-        tweeningConnection = RunService.Heartbeat:Connect(function()
-            local closest = findClosestLguy()
-            if closest and not isCurrentlyTweening then
-                tweenToLguy(closest)
-            end
-        end)
-    else
-        if tweeningConnection then
-            tweeningConnection:Disconnect()
-            tweeningConnection = nil
-        end
-        if spamConnection then
-            spamConnection:Disconnect()
-            spamConnection = nil
-        end
-        setNoclip(false)
     end
 end)
 
