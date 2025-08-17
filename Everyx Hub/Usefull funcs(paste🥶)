@@ -122,4 +122,17 @@ local function copyPlrPos()
     local hrp = character:WaitForChild("HumanoidRootPart")
     setclipboard("Vector3.new(" .. hrp.Position.X  .. "," .. hrp.Position.Y .. "," .. hrp.Position.Z .. ")")
 end
+
+function checkForRaid()
+    if game:GetService("Players").LocalPlayer.PlayerGui.Settings.RaidConfirm.Visible == true then
+        local yes = game:GetService("Players").LocalPlayer.PlayerGui.Settings.RaidConfirm.Yes
+        replicateButtonClick(yes)
+    end
+end
+
+
+while true do
+    checkForRaid()
+    task.wait(1)
+end
     
