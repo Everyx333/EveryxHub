@@ -157,7 +157,17 @@ Ring1:AddDropdown("AfkPos", {
         afkposMode = Value
     end)
 
-    
+    Tabs.Ring1:AddButton({
+        Title = "Start afk",
+        Description = "Rejoin to disable",
+        Callback = function()
+            if afkPosMode == "Premade" then
+                while true do
+                    
+                end
+            end
+        end
+    })
 
 
 -- Addons:
