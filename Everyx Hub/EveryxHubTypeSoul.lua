@@ -29,7 +29,7 @@ Fluent:Notify({
 
 Tabs.Ring1:AddParagraph({
     Title = "Ring 1 tab",
-    Content = "Auto boss, auto npc(probably soon),esp npcs"
+    Content = "Auto boss, auto npc(probably soon),esp npcs,auto afk 25h"
     })
     Tabs.Ring1:AddButton({
         Title = "Esp npcs",
@@ -140,8 +140,22 @@ end
     })
 
 
-    
 
+local afkposMode = "Premade"
+
+    local AfkPos = Tabs.Main
+Ring1:AddDropdown("AfkPos", {
+        Title = "AfkPos",
+        Values = {"Premade","Custom"},
+        Multi = false,
+        Default = 1,
+    })
+
+    Dropdown:SetValue("Premade")
+
+    Dropdown:OnChanged(function(Value)
+        afkposMode = Value
+    end)
 
     
 
