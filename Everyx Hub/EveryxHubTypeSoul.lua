@@ -249,8 +249,7 @@ end
 local afkposMode = "Premade"
 local afkPos = Vector3.new(907.8778076171875,2173.336669921875,-36.08327865600586)
 
-    local AfkPos = Tabs.Main
-Ring1:AddDropdown("AfkPos", {
+    local AfkPos = Tabs.Ring1:AddDropdown("AfkPos", {
         Title = "AfkPos",
         Values = {"Premade","Custom"},
         Multi = false,
