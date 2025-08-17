@@ -32,7 +32,7 @@ local TweenService = game:GetService("TweenService")
 local RunService = game:GetService("RunService")
 local Players = game:GetService("Players")
 
-local function moveto(obj, speed)
+function moveto(obj, speed)
     local player = Players.LocalPlayer
     if not player or not player.Character then return end
     local hrp = player.Character:FindFirstChild("HumanoidRootPart")
@@ -106,6 +106,22 @@ local function moveto(obj, speed)
     end)
 end
 
+
+function replicateButtonClick(button)
+        GuiService.SelectedObject = button
+    VIM:SendKeyEvent(true, Enum.KeyCode.Return, false, game)
+    wait(0.05)
+    VIM:SendKeyEvent(false, Enum.KeyCode.Return, false, game)
+    wait(0.05)
+    GuiService.GuiNavigationEnabled = false
+end
+
+function checkForRaid()
+    if game:GetService("Players").LocalPlayer.PlayerGui.Settings.RaidConfirm.Visible == true then
+        local yes = game:GetService("Players").LocalPlayer.PlayerGui.Settings.RaidConfirm.Yes
+        replicateButtonClick(yes)
+    end
+end
 
 
 Tabs.Ring1:AddParagraph({
@@ -244,7 +260,9 @@ Ring1:AddDropdown("AfkPos", {
         Callback = function()
             if afkPosMode == "Premade" then
                 while true do
-                    moveto(Vector3.new(907.8778076171875,2173.336669921875,-36.08327865600586),100)
+                    checkForRaid()
+moveto(Vector3.new(907.8778076171875,2173.336669921875,-36.08327865600586),100)
+                    task.wait(1)
                 end
             end
         end
