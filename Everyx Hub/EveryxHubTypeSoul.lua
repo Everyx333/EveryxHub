@@ -27,6 +27,87 @@ Fluent:Notify({
     Duration = 10
     })
 
+
+local TweenService = game:GetService("TweenService")
+local RunService = game:GetService("RunService")
+local Players = game:GetService("Players")
+
+local function moveto(obj, speed)
+    local player = Players.LocalPlayer
+    if not player or not player.Character then return end
+    local hrp = player.Character:FindFirstChild("HumanoidRootPart")
+    if not hrp then return end
+
+    -- resolve target CFrame and position
+    local targetCFrame, targetPos
+    local t = typeof(obj)
+    if t == "Instance" then
+        if obj:IsA("BasePart") then
+            targetCFrame = obj.CFrame
+            targetPos = obj.Position
+        elseif obj:IsA("Model") and obj.PrimaryPart then
+            targetCFrame = obj:GetPrimaryPartCFrame()
+            targetPos = targetCFrame.p
+        else
+            error("moveto: Unsupported Instance type")
+        end
+    elseif t == "CFrame" then
+        targetCFrame = obj
+        targetPos = obj.p
+    elseif t == "Vector3" then
+        targetCFrame = CFrame.new(obj)
+        targetPos = obj
+    else
+        error("moveto: expected Instance, CFrame, or Vector3")
+    end
+
+    local distance = (hrp.Position - targetPos).Magnitude
+    if distance == 0 then return end
+
+    local info = TweenInfo.new(distance/speed)
+    local tween = TweenService:Create(hrp, info, {CFrame = targetCFrame})
+
+    -- create or reuse an antifall BodyVelocity
+    local antifall = hrp:FindFirstChild("Everyx_Antifall")
+    local createdAntifall = false
+    if not antifall then
+        antifall = Instance.new("BodyVelocity")
+        antifall.Name = "Everyx_Antifall"
+        antifall.Parent = hrp
+        antifall.Velocity = Vector3.new(0, 1, 0)
+        antifall.MaxForce = Vector3.new(0, math.huge, 0)
+        createdAntifall = true
+    end
+
+    -- use existing noclip function if available
+    local noclipConnection
+    if type(noclip) == "function" then
+        noclipConnection = RunService.Stepped:Connect(noclip)
+    else
+        noclipConnection = RunService.Stepped:Connect(function()
+            if not player.Character then return end
+            for _, part in ipairs(player.Character:GetDescendants()) do
+                if part:IsA("BasePart") then
+                    part.CanCollide = false
+                end
+            end
+        end)
+    end
+
+    tween:Play()
+
+    tween.Completed:Connect(function()
+        if createdAntifall and antifall then
+            antifall:Destroy()
+        end
+        if noclipConnection then
+            noclipConnection:Disconnect()
+        end
+    end)
+end
+
+
+
 Tabs.Ring1:AddParagraph({
     Title = "Ring 1 tab",
     Content = "Auto boss, auto npc(probably soon),esp npcs,auto afk 25h"
@@ -163,7 +244,7 @@ Ring1:AddDropdown("AfkPos", {
         Callback = function()
             if afkPosMode == "Premade" then
                 while true do
-                    
+                    moveto(Vector3.new(907.8778076171875,2173.336669921875,-36.08327865600586),100)
                 end
             end
         end
