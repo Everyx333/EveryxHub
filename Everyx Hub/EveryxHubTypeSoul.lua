@@ -2,6 +2,11 @@ local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/
 local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/SaveManager.lua"))()
 local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/InterfaceManager.lua"))()
 
+
+local lp = game.Players.LocalPlayer
+local character = lp.Character or lp.CharacterAdded:Wait()
+local hrp = character:WaitForChild("HumanoidRootPart")
+
 local VIM = game:GetService("VirtualInputManager")
 local GuiService = game:GetService("GuiService")
 
