@@ -264,7 +264,7 @@ Ring1:AddDropdown("AfkPos", {
             if afkPosMode == "Premade" then
                 while true do
                     checkForRaid()
-moveto(Vector3.new(907.8778076171875,2173.336669921875,-36.08327865600586),100)
+                    moveto(Vector3.new(907.8778076171875,2173.336669921875,-36.08327865600586),100)
                     task.wait(1)
                 end
             end
