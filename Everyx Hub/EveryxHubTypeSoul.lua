@@ -247,6 +247,7 @@ end
 
 
 local afkposMode = "Premade"
+local afkPos = Vector3.new(907.8778076171875,2173.336669921875,-36.08327865600586)
 
     local AfkPos = Tabs.Main
 Ring1:AddDropdown("AfkPos", {
@@ -263,6 +264,15 @@ Ring1:AddDropdown("AfkPos", {
     end)
 
     Tabs.Ring1:AddButton({
+        Title = "Set afk pos",
+        Description = "Sets your current pos as afk pos",
+        Callback = function()
+          afkPos = Vector3.new(hrp.Position.X,hrp.Position.Y,hrp.Position.Z)
+        end
+    })
+
+
+    Tabs.Ring1:AddButton({
         Title = "Start afk",
         Description = "Rejoin to disable",
         Callback = function()
@@ -270,6 +280,12 @@ Ring1:AddDropdown("AfkPos", {
                 while true do
                     checkForRaid()
                     moveto(Vector3.new(907.8778076171875,2173.336669921875,-36.08327865600586),100)
+                    task.wait(1)
+                end
+            elseif afkPosMode == "Custom" then
+                while true do
+                    checkForRaid()
+                    moveto(afkPos,100)
                     task.wait(1)
                 end
             end
@@ -295,8 +311,8 @@ SaveManager:SetIgnoreIndexes({})
 -- use case for doing it this way:
 -- a script hub could have themes in a global folder
 -- and game configs in a separate folder per game
-InterfaceManager:SetFolder("FluentScriptHub")
-SaveManager:SetFolder("FluentScriptHub/specific-game")
+InterfaceManager:SetFolder("EveryxScriptHub")
+SaveManager:SetFolder("EveryxScriptHub/TypeSoul")
 
 InterfaceManager:BuildInterfaceSection(Tabs.Settings)
 SaveManager:BuildConfigSection(Tabs.Settings)
