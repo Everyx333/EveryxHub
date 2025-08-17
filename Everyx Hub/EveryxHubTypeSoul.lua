@@ -2,6 +2,9 @@ local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/
 local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/SaveManager.lua"))()
 local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/InterfaceManager.lua"))()
 
+local VIM = game:GetService("VirtualInputManager")
+local GuiService = game:GetService("GuiService")
+
 local Window = Fluent:CreateWindow({
     Title = "Everyx Hub" .. "0.0.1(BETA),
     SubTitle = "by Everyx",
