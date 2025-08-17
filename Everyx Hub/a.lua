@@ -11,5 +11,5 @@ end
 while true do
     task.wait()
     replicateButtonClick(game:GetService("Players").LocalPlayer.PlayerGui.Screen.Quests.Container.Get)
-   replicateButtonClick(game:GetService("Players").LocalPlayer.PlayerGui.Screen.Quests.Container.Frame.Claim)
+    replicateButtonClick(game:GetService("Players").LocalPlayer.PlayerGui.Screen.Quests.Container.Frame.Claim)
 end
